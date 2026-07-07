@@ -1,0 +1,11 @@
+{
+  "name": "enterprise-ecommerce-backend",
+  "version": "1.0.0",
+  "description": "Enterprise E-Commerce Backend",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  }
+}
