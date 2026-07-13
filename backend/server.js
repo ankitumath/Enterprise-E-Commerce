@@ -23,7 +23,7 @@ app.use(helmet());
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://YOUR_FRONTEND.vercel.app"
+  "https://enterprise-e-commerce-six.vercel.app",
 ];
 
 const limiter = rateLimit({
