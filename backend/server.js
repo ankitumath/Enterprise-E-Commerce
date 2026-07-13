@@ -17,8 +17,36 @@ connectDB();
 
 const app = express();
 
-app.use(cors());
-app.use(express.json());
+import helmet from "helmet";
+
+app.use(helmet());
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://YOUR_FRONTEND.vercel.app"
+];
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100
+});
+
+app.use(limiter);
+
+app.use(cors({
+  origin(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
+}));app.use(express.json());
+
+import rateLimit from "express-rate-limit";
+
+
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/categories", categoryRoutes);
@@ -38,5 +66,20 @@ app.get("/", (req, res) => {
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+console.log(`Server running on port ${PORT}`);});
+
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: "Route not found"
+  });
+});
+
+app.use((err, req, res, next) => {
+  console.error(err);
+
+  res.status(500).json({
+    success: false,
+    message: "Internal Server Error"
+  });
 });
