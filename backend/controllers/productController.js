@@ -66,22 +66,56 @@ export const createProduct = async (req, res) => {
 
 export const getProducts = async (req, res) => {
   try {
-    const products = await Product.find({
-  isActive: true,
-})
-.populate("category", "name slug")
-.populate("createdBy", "name email");
+    const {
+      keyword,
+      category,
+      minPrice,
+      maxPrice,
+      sort,
+    } = req.query;
 
-    res.status(200).json({
-      success: true,
-      count: products.length,
-      products,
-    });
+    let filter = {};
+
+    if (keyword) {
+      filter.name = {
+        $regex: keyword,
+        $options: "i",
+      };
+    }
+
+    if (category) {
+      filter.category = category;
+    }
+
+    if (minPrice || maxPrice) {
+      filter.price = {};
+
+      if (minPrice)
+        filter.price.$gte = Number(minPrice);
+
+      if (maxPrice)
+        filter.price.$lte = Number(maxPrice);
+    }
+
+    let query = Product.find(filter).populate("category");
+
+    if (sort === "price") {
+      query = query.sort({ price: 1 });
+    }
+
+    if (sort === "-price") {
+      query = query.sort({ price: -1 });
+    }
+
+    if (sort === "latest") {
+      query = query.sort({ createdAt: -1 });
+    }
+
+    const products = await query;
+
+    res.json(products);
   } catch (error) {
-    console.error("Get Products Error:", error);
-
     res.status(500).json({
-      success: false,
       message: error.message,
     });
   }
@@ -179,5 +213,33 @@ export const deleteProduct = async (req, res) => {
       message: error.message,
     });
   }
+};
+
+export const getProductById = async (req, res) => {
+
+    try {
+
+        const product = await Product
+            .findById(req.params.id)
+            .populate("category");
+
+        if (!product) {
+
+            return res.status(404).json({
+                message: "Product not found"
+            });
+
+        }
+
+        res.json(product);
+
+    } catch (error) {
+
+        res.status(500).json({
+            message: error.message
+        });
+
+    }
+
 };
 

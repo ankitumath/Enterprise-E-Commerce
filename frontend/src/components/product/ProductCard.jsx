@@ -1,7 +1,9 @@
 import { FaHeart, FaStar } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const ProductCard = ({ product }) => {
   return (
+     <Link to={`/product/${product._id}`}>
     <div className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 hover:-translate-y-2">
 
       {/* Product Image */}
@@ -13,7 +15,7 @@ const ProductCard = ({ product }) => {
             product.images?.[0]?.url ||
             "https://via.placeholder.com/400x300"
           }
-          alt={product.name}
+          alt={product.title}
           className="h-60 w-full object-cover"
         />
 
@@ -37,7 +39,7 @@ const ProductCard = ({ product }) => {
 
         <h3 className="font-bold text-xl mt-2">
 
-          {product.name}
+          {product.title}
 
         </h3>
 
@@ -76,6 +78,7 @@ const ProductCard = ({ product }) => {
       </div>
 
     </div>
+  </Link>
   );
 };
 

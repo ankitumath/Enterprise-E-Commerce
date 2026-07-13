@@ -13,6 +13,8 @@ import ProtectedRoute from "../components/auth/ProtectedRoute";
 import PublicRoute from "../components/auth/PublicRoute";
 import RoleRoute from "../components/auth/RoleRoute";
 import Unauthorized from "../pages/shared/Unauthorized";
+import Shop from "../pages/customer/Shop";
+import ProductDetails from "../pages/customer/ProductDetails";
 
 function AppRoutes() {
   return (
@@ -23,6 +25,11 @@ function AppRoutes() {
         <Route element={<MainLayout />}>
 
   <Route path="/" element={<Home />} />
+  <Route path="/shop" element={<Shop />} />
+  <Route
+    path="/product/:id"
+    element={<ProductDetails />}
+/>
 
  <Route
   path="/dashboard"

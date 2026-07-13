@@ -20,10 +20,7 @@ const useProducts = () => {
     fetchProducts();
   }, []);
 
-  return {
-    products,
-    loading,
-  };
+  return { products, loading };
 };
 
 export default useProducts;
